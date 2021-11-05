@@ -14,7 +14,7 @@ const team = []
 //     <title>Document</title>
 // </head>
 // <body>
-  
+
 // </body>
 // </html>
 // `
@@ -45,9 +45,9 @@ function mainQuestions() {
                 "Manager",
                 "Engineer"
             ]
-        }   
-    ]).then(function(answer) {
-        
+        }
+    ]).then(function (answer) {
+
         if (answer.type === "Intern") {
             internQuestions(answer)
         } else if (answer.type === "Manager") {
@@ -55,7 +55,7 @@ function mainQuestions() {
         } else if (answer.type === "Engineer") {
             engineerQuestions()
         }
-    }) 
+    })
 }
 
 function internQuestions(previousData) {
@@ -65,7 +65,7 @@ function internQuestions(previousData) {
         type: "input",
         name: "school",
         message: "whats your school?"
-    }) .then(function(answers) {
+    }).then(function (answers) {
         console.log(answers, previousData)
         // make the inter
         var intern = new Intern(previousData.name, previousData.id, previousData.email, answers.school)
@@ -76,6 +76,17 @@ function internQuestions(previousData) {
 
 function managerQuestions() {
     console.log("Time to ask manager questons.")
+    inquirer.prompt({
+        type: "input",
+        name: "office",
+        message: "What is the manager's office number?"
+    }).then(function (answers) {
+        console.log(answers, previousData)
+
+        var manager = new Intern(previousData.name, previousData.id, previousData.email, answers.office)
+        team.push(manager)
+        addAnother()
+    })
 }
 
 function engineerQuestions() {
@@ -87,12 +98,12 @@ function addAnother() {
         type: "confirm",
         name: "addAnother",
         message: "Would you like to add another employee?"
-    }).then(function(answer) {
-if (answer.addAnother) {
-    mainQuestions()
-} else {
-    console.log("time to make HTML")
-}
+    }).then(function (answer) {
+        if (answer.addAnother) {
+            mainQuestions()
+        } else {
+            console.log("time to make HTML")
+        }
     })
 }
 
