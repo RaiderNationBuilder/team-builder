@@ -1,5 +1,6 @@
 const inquirer = require('inquirer')
 const Intern = require('./lib/Intern')
+const Manager = require('./lib/Manager')
 
 const team = []
 
@@ -45,15 +46,15 @@ function mainQuestions() {
                 "Manager",
                 "Engineer"
             ]
-        }
+        }        
     ]).then(function (answer) {
 
         if (answer.type === "Intern") {
             internQuestions(answer)
-        } else if (answer.type === "Manager") {
-            managerQuestions()
+        } else if (answer.type === "Finish-Team") {
+            renderHtml(answer)
         } else if (answer.type === "Engineer") {
-            engineerQuestions()
+            engineerQuestions(answer)
         }
     })
 }
@@ -74,7 +75,7 @@ function internQuestions(previousData) {
     })
 }
 
-function managerQuestions() {
+function managerQuestions(previousData) {
     console.log("Time to ask manager questons.")
     inquirer.prompt({
         type: "input",
@@ -83,7 +84,7 @@ function managerQuestions() {
     }).then(function (answers) {
         console.log(answers, previousData)
 
-        var manager = new Intern(previousData.name, previousData.id, previousData.email, answers.office)
+        var manager = new Manager(previousData.name, previousData.id, previousData.email, answers.office)
         team.push(manager)
         addAnother()
     })
