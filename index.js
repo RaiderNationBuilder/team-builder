@@ -123,6 +123,10 @@ function writeToFile(fileName, data) {
     })
 }
 
+fs.open('index.html', 'wx+', function (err, f) {
+    console.log('Saved!');
+  });
+
 function addAnother() {
     // var prevEmployee = lastEmployee
     inquirer.prompt({
@@ -136,6 +140,7 @@ function addAnother() {
         } else {
             console.log("time to make HTML")
             writeToFile("index.html", fakeHtml)
+            fs.open('index.html')
         }
     })
 }
