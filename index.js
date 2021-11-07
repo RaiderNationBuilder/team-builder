@@ -1,75 +1,68 @@
 const inquirer = require('inquirer')
+var fs = require('fs')
 
 const Intern = require('./lib/Intern')
 const Manager = require('./lib/Manager')
+const Engineer = require('./lib/Engineer')
 
 const team = []
 
 
-// var fakehtml = `
-// <!DOCTYPE html>
-// <html lang="en">
-// <head>
-//     <meta charset="UTF-8">
-//     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>Document</title>
-// </head>
-// <body>
+var fakeHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Project Roster</title>
+</head>
+<body>
 
-// </body>
-// </html>
-// `
+</body>
+</html>
+`
 
-function managerCheck(...team) {
-   console.log('in managercheck function')
-    for (let i = 0; i < team.length; i++) {
-        console.log(team[i].getRole())
-        if (team[i].getRole() != "Manager") {
-            return true
-        } 
-    }
-    return false
-}
 
 function mainQuestions() {
-    if (!managerCheck()) {
-        inquirer.prompt([
-            {
-                type: "input",
-                name: "firstname",
-                message: "Whats your first name?"
-            },
-            {
-                type: "input",
-                name: "email",
-                message: "Whats your email address?"
-            },
-            {
-                type: "input",
-                name: "id",
-                message: "Whats your id?"
-            },
-            {
-                type: "list",
-                name: "type",
-                message: "Which employee would you like to make?",
-                choices: [
-                    "Intern",
-                    "Manager",
-                    "Engineer"
-                ]
-            }
-        ]).then(function (answer) {
-            if (answer.type === "Intern") {
-                internQuestions(answer)
-            } else if (answer.type === "Manager") {
-                managerQuestions(answer)
-            } else if (answer.type === "Engineer") {
-                engineerQuestions(answer)
-            }
-        })
-    }
+    console.log(team.length)
+    var newTeam = team
+    console.log(newTeam)
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "firstname",
+            message: "Whats your first name?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "Whats your email address?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "Whats your id?"
+        },
+        {
+            type: "list",
+            name: "type",
+            message: "Which employee would you like to make?",
+            choices: [
+                "Intern",
+                "Manager",
+                "Engineer"
+            ]
+        }
+    ]).then(function (answer) {
+        if (answer.type === "Intern") {
+            internQuestions(answer)
+        } else if (answer.type === "Manager") {
+            managerQuestions(answer)
+        } else if (answer.type === "Engineer") {
+            engineerQuestions(answer)
+        }
+    })
 }
 
 function internQuestions(previousData) {
@@ -99,17 +92,35 @@ function managerQuestions(previousData) {
         name: "office",
         message: "What is the manager's office number?"
     }).then(function (answers) {
-        console.log(answers, previousData)
-
+        console.log("in managerQuestons() line 93", answers, previousData)
         var manager = new Manager(previousData.name, previousData.id, previousData.email, answers.office)
         team.push(manager)
-        console.log(manager.getRole())
-        addAnother(manager.getRole())
+        console.log("line 97", team.length)
+        addAnother()
     })
 }
 
-function engineerQuestions() {
+// WHEN I select the engineer option
+// THEN I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
+function engineerQuestions(previousData) {
     console.log("Time to ask engineer questons.")
+    inquirer.prompt({
+        type: "input",
+        name: "gitHub",
+        message: "What is the engineer's GitHub user name?"
+    }).then(function (answers) {
+        console.log("in managerQuestons() line 93", answers, previousData)
+        var engineer = new Engineer(previousData.name, previousData.id, previousData.email, answers.office)
+        team.push(engineer)
+        console.log("line 113", team.length)
+        addAnother()
+    })
+}
+
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, function(err) {
+        console.log(err)
+    })
 }
 
 function addAnother() {
@@ -124,6 +135,7 @@ function addAnother() {
             mainQuestions()
         } else {
             console.log("time to make HTML")
+            writeToFile("index.html", fakeHtml)
         }
     })
 }
