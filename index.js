@@ -14,21 +14,22 @@ let special = ""
 
 
 function addCard(card) {
-
-    name = card.firstname
+console.log(card)
+    name = card.name
     title = card.getRole()
     id = card.id
     email = card.email
 
-    if (card.type === "Manager") {
-        special = "Office #: " + card.office
-    } else if (card.type === "Intern") {
+    if (title === "Manager") {
+        special = "Office #: " + title.office
+    } else if (title === "Intern") {
         special = "School: " + card.school
-    } else if (card.type === "Engineer") {
-        special = `GitHub Id: <a href=${card.github} class=btn btn-primary>`
+    } else if (title === "Engineer") {
+        special = `GitHub Id: <a href=${title.github} class=btn btn-primary>`
     }
 
     var html = `
+    <div class="card" style="width: 10rem; border: 0.15em solid black; padding: 0.25em">
         <div class="card-body">
             <header>
                 <h3 class="card-title" style="margin: 0">${name}</h3>
@@ -36,10 +37,9 @@ function addCard(card) {
             </header>
             <p class="card-text">ID:${id}</p>
             <p class="card-text">Email:${email}</p>
-            <p class="card-text">${special}</p>
-            
-        </div>
-    </div>
+            <p class="card-text">${special}</p>            
+        </div>  
+    </div>  
     `
     return html
 }
@@ -62,7 +62,7 @@ var fakeHtml = `
     <header style="background-color: red; height: 7em">
         <h1 style="color: white; text-align: center; line-height: 3.5em;">My Team</h1>
     </header>
-    <div class="card" style="width: 10rem; border: 0.15em solid black; padding: 0.25em">
+    <div style="display: flex; flex-wrap: wrap; align-content: stretch; justify-content: space-around;">
 `
 
 const endHtml = `
@@ -122,7 +122,7 @@ function internQuestions(previousData) {
     }).then(function (answers) {
         console.log(answers, previousData)
         // make the intern
-        var intern = new Intern(previousData.name, previousData.id, previousData.email, answers.school)
+        var intern = new Intern(previousData.firstname, previousData.id, previousData.email, answers.school)
         team.push(intern)
         addAnother()
     })
@@ -139,7 +139,7 @@ function managerQuestions(previousData) {
         message: "What is the manager's office number?"
     }).then(function (answers) {
         console.log("in managerQuestons() line 93", answers, previousData)
-        var manager = new Manager(previousData.name, previousData.id, previousData.email, answers.office)
+        var manager = new Manager(previousData.firstname, previousData.id, previousData.email, answers.office)
         team.push(manager)
         console.log("line 97", team.length)
         addAnother()
@@ -156,7 +156,7 @@ function engineerQuestions(previousData) {
         message: "What is the engineer's GitHub user name?"
     }).then(function (answers) {
         console.log("in managerQuestons() line 93", answers, previousData)
-        var engineer = new Engineer(previousData.name, previousData.id, previousData.email, answers.github)
+        var engineer = new Engineer(previousData.firstname, previousData.id, previousData.email, answers.github)
         team.push(engineer)
         console.log("line 113", team.length)
         addAnother()
@@ -173,8 +173,10 @@ function renderHtml() {
     var card = ""
     for (let i = 0; i < team.length; i++) {
         card += addCard(team[i])
+        console.log(card)
     }
-    fakeHtml += (card + endHtml)
+    fakeHtml += card
+    fakeHtml += endHtml
 
     writeToFile("index.html", fakeHtml)
 }
