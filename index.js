@@ -169,11 +169,6 @@ function writeToFile(fileName, data) {
     })
 }
 
-<<<<<<< HEAD
-fs.open('index.html', 'wx+', function (err, f) {
-    console.log('Saved!');
-  });
-=======
 function renderHtml() {
     var card = ""
     for (let i = 0; i < team.length; i++) {
@@ -185,7 +180,6 @@ function renderHtml() {
 
     writeToFile("index.html", fakeHtml)
 }
->>>>>>> feature/openFile
 
 function addAnother() {
     // var prevEmployee = lastEmployee
@@ -199,12 +193,7 @@ function addAnother() {
             mainQuestions()
         } else {
             console.log("time to make HTML")
-<<<<<<< HEAD
-            writeToFile("index.html", fakeHtml)
-            fs.open('index.html')
-=======
             renderHtml()
->>>>>>> feature/openFile
         }
     })
 }
