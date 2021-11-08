@@ -31,7 +31,7 @@ function addCard(card) {
     var html = `
         <div class="card-body">
             <header>
-                <h3 class="card-title" style="margin: 0">${card.firstname}</h3>
+                <h3 class="card-title" style="margin: 0">${name}</h3>
                 <h4 style="margin: 0">${title}</h4>
             </header>
             <p class="card-text">ID:${id}</p>
