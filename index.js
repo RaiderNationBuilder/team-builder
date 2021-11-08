@@ -16,7 +16,7 @@ let special = ""
 function addCard(card) {
 
     name = card.firstname
-    title = card.type
+    title = card.getRole()
     id = card.id
     email = card.email
 
