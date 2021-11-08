@@ -13,26 +13,25 @@ let email = ""
 let special = ""
 
 
-function addCard() {
+function addCard(card) {
 
-    for (let i = 0; i < team.length; i++) {
-        name = team.name
-        title = team.type
-        id = team.id
-        email = team.email
+    name = card.firstname
+    title = card.type
+    id = card.id
+    email = card.email
 
-        if (title === "Manager") {
-            special = "Office #: " + team.office
-        } else if (title === "Intern") {
-            special = "School: " + team.school
-        } else if (title === "Engineer") {
-            special = `GitHub Id: <a href=${team.github} class=btn btn-primary>`
-        }
+    if (card.type === "Manager") {
+        special = "Office #: " + card.office
+    } else if (card.type === "Intern") {
+        special = "School: " + card.school
+    } else if (card.type === "Engineer") {
+        special = `GitHub Id: <a href=${card.github} class=btn btn-primary>`
+    }
 
-        var html = `
+    var html = `
         <div class="card-body">
             <header>
-                <h3 class="card-title" style="margin: 0">${name}</h3>
+                <h3 class="card-title" style="margin: 0">${card.firstname}</h3>
                 <h4 style="margin: 0">${title}</h4>
             </header>
             <p class="card-text">ID:${id}</p>
@@ -42,7 +41,6 @@ function addCard() {
         </div>
     </div>
     `
-    }
     return html
 }
 
@@ -65,11 +63,12 @@ var fakeHtml = `
         <h1 style="color: white; text-align: center; line-height: 3.5em;">My Team</h1>
     </header>
     <div class="card" style="width: 10rem; border: 0.15em solid black; padding: 0.25em">
+`
 
+const endHtml = `
     </div>
-</body>
 
-</html>
+</body>
 
 </html>
 `
@@ -130,7 +129,6 @@ function internQuestions(previousData) {
 }
 // WHEN I start the application
 // THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number  DONE!!
-
 // WHEN I enter the team manager’s name, employee ID, email address, and office number
 // THEN I am presented with a menu with the option to add an engineer or an intern or to finish building my team
 function managerQuestions(previousData) {
@@ -171,6 +169,16 @@ function writeToFile(fileName, data) {
     })
 }
 
+function renderHtml() {
+    var card = ""
+    for (let i = 0; i < team.length; i++) {
+        card += addCard(team[i])
+    }
+    fakeHtml += (card + endHtml)
+
+    writeToFile("index.html", fakeHtml)
+}
+
 function addAnother() {
     // var prevEmployee = lastEmployee
     inquirer.prompt({
@@ -183,7 +191,7 @@ function addAnother() {
             mainQuestions()
         } else {
             console.log("time to make HTML")
-            writeToFile("index.html", fakeHtml)
+            renderHtml()
         }
     })
 }
