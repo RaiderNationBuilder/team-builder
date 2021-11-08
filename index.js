@@ -6,28 +6,76 @@ const Manager = require('./lib/Manager')
 const Engineer = require('./lib/Engineer')
 
 const team = []
+let name = ""
+let title = ""
+let id = ""
+let email = ""
+let special = ""
 
+
+function addCard() {
+
+    for (let i = 0; i < team.length; i++) {
+        name = team.name
+        title = team.type
+        id = team.id
+        email = team.email
+
+        if (title === "Manager") {
+            special = "Office #: " + team.office
+        } else if (title === "Intern") {
+            special = "School: " + team.school
+        } else if (title === "Engineer") {
+            special = `GitHub Id: <a href=${team.github} class=btn btn-primary>`
+        }
+
+        var html = `
+        <div class="card-body">
+            <header>
+                <h3 class="card-title" style="margin: 0">${name}</h3>
+                <h4 style="margin: 0">${title}</h4>
+            </header>
+            <p class="card-text">ID:${id}</p>
+            <p class="card-text">Email:${email}</p>
+            <p class="card-text">${special}</p>
+            
+        </div>
+    </div>
+    `
+    }
+    return html
+}
 
 var fakeHtml = `
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Project Roster</title>
+    <title>My Project Roster</title>
 </head>
-<body>
 
+<body style="margin: 0">
+    <header style="background-color: red; height: 7em">
+        <h1 style="color: white; text-align: center; line-height: 3.5em;">My Team</h1>
+    </header>
+    <div class="card" style="width: 10rem; border: 0.15em solid black; padding: 0.25em">
+
+    </div>
 </body>
+
+</html>
+
 </html>
 `
 
-
 function mainQuestions() {
     console.log(team.length)
-    var newTeam = team
-    console.log(newTeam)
     inquirer.prompt([
         {
             type: "input",
@@ -110,7 +158,7 @@ function engineerQuestions(previousData) {
         message: "What is the engineer's GitHub user name?"
     }).then(function (answers) {
         console.log("in managerQuestons() line 93", answers, previousData)
-        var engineer = new Engineer(previousData.name, previousData.id, previousData.email, answers.office)
+        var engineer = new Engineer(previousData.name, previousData.id, previousData.email, answers.github)
         team.push(engineer)
         console.log("line 113", team.length)
         addAnother()
@@ -118,7 +166,7 @@ function engineerQuestions(previousData) {
 }
 
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, function(err) {
+    fs.writeFile(fileName, data, function (err) {
         console.log(err)
     })
 }
